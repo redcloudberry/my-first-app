@@ -48,6 +48,17 @@
       // Service Worker 등록
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js");
+        navigator.serviceWorker.register("service-worker.js").then(reg => {
+          reg.onupdatefound = () => {
+            const newWorker = reg.installing;
+            newWorker.onstatechange = () => {
+              if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                // 새 버전 감지 → 자동 새로고침
+                location.reload();
+              }
+            };
+          };
+        });
       }
     </script>
 
