@@ -1,19 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
-    <meta charset="UTF-8">
-    <title>내 첫 앱</title>
-    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>내 첫 PWA</title>
+    <link rel="manifest" href="manifest.json" />
   </head>
   <body>
-    <h1>안녕하세요 👋</h1>
-    <p>이건 내가 만든 첫 웹앱이에요</p>
 
-    <button onclick="alert('반가워요!')">
-        눌러보세요
-    </button>
+    <!-- 🔐 잠금 화면 -->
+    <div id="lock">
+      <h2>🔐 비밀번호를 입력하세요</h2>
+      <input type="password" id="pw" placeholder="비밀번호" />
+      <button onclick="checkPassword()">확인</button>
+      <p id="error" style="color:red;"></p>
+    </div>
+
+    <!-- ✅ 실제 앱 화면 -->
+    <div id="app" style="display:none;">
+      <h1>안녕하세요 👋</h1>
+      <button onclick="alert('반가워요!')">눌러보세요</button>
+    </div>
 
     <script>
+      const PASSWORD = "1234"; // 🔴 여기 비밀번호 변경
+
+      // 이미 인증했으면 바로 앱 보여주기
+      if (localStorage.getItem("auth") === "ok") {
+        showApp();
+      }
+
+      function checkPassword() {
+        const input = document.getElementById("pw").value;
+        if (input === PASSWORD) {
+          localStorage.setItem("auth", "ok");
+          showApp();
+        } else {
+          document.getElementById("error").innerText = "비밀번호가 틀렸습니다";
+        }
+      }
+
+      function showApp() {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("app").style.display = "block";
+      }
+
+      // Service Worker 등록
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("service-worker.js");
       }
