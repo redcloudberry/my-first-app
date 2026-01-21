@@ -12,5 +12,12 @@
     <button onclick="alert('반가워요!')">
         눌러보세요
     </button>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js");
+      }
+    </script>
+
   </body>
 </html>
